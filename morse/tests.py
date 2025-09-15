@@ -13,30 +13,73 @@ class MorseViewTest(TestCase):
         self.assertContains(response, "Morse Code Application")
         self.assertContains(response, "Enter text here...")
     
-    def test_morse_conversion_post(self):
-        """Test POST request for morse code conversion"""
+    def test_text_to_morse_conversion(self):
+        """Test POST request for text to morse conversion"""
         response = self.client.post(reverse("home"), {
-            'word': 'HELLO',
-            'action': 'convert'
+            'input_text': 'HELLO',
+            'action': 'convert',
+            'mode': 'text_to_morse'
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, ".... . .-.. .-.. ---")
     
-    def test_empty_word_post(self):
-        """Test POST request with empty word"""
+    def test_morse_to_text_conversion(self):
+        """Test POST request for morse to text conversion"""
         response = self.client.post(reverse("home"), {
-            'word': '',
+            'input_text': '.... . .-.. .-.. ---',
+            'action': 'convert',
+            'mode': 'morse_to_text'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "HELLO")
+    
+    def test_empty_input_post(self):
+        """Test POST request with empty input"""
+        response = self.client.post(reverse("home"), {
+            'input_text': '',
             'action': 'convert'
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Please enter some text")
     
-    def test_audio_download_post(self):
-        """Test POST request for audio download"""
+    def test_invalid_morse_input(self):
+        """Test POST request with invalid morse code"""
         response = self.client.post(reverse("home"), {
-            'word': 'TEST',
-            'action': 'download'
+            'input_text': 'invalid morse',
+            'action': 'convert',
+            'mode': 'morse_to_text'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "doesn't appear to be valid morse code")
+    
+    def test_text_audio_download(self):
+        """Test POST request for audio download from text"""
+        response = self.client.post(reverse("home"), {
+            'input_text': 'TEST',
+            'action': 'download',
+            'mode': 'text_to_morse'
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'audio/wav')
         self.assertIn('attachment', response['Content-Disposition'])
+    
+    def test_morse_audio_download(self):
+        """Test POST request for audio download from morse"""
+        response = self.client.post(reverse("home"), {
+            'input_text': '- . ... -',
+            'action': 'download',
+            'mode': 'morse_to_text'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'audio/wav')
+        self.assertIn('attachment', response['Content-Disposition'])
+    
+    def test_morse_with_word_separators(self):
+        """Test morse code with different word separators"""
+        response = self.client.post(reverse("home"), {
+            'input_text': '.... . .-.. .-.. --- / .-- --- .-. .-.. -..',
+            'action': 'convert',
+            'mode': 'morse_to_text'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "HELLO WORLD")
