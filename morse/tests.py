@@ -10,8 +10,8 @@ class MorseViewTest(TestCase):
     def test_homepage_contains_expected_content(self):
         """Test that the homepage contains expected content"""
         response = self.client.get(reverse("home"))
-        self.assertContains(response, "Morse Code Application")
-        self.assertContains(response, "Enter text here...")
+        self.assertContains(response, "Morse Code Converter")
+        self.assertContains(response, "Enter your text here...")  
     
     def test_text_to_morse_conversion(self):
         """Test POST request for text to morse conversion"""
@@ -50,7 +50,7 @@ class MorseViewTest(TestCase):
             'mode': 'morse_to_text'
         })
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "doesn't appear to be valid morse code")
+        self.assertContains(response, "Input doesn&#x27;t appear to be valid morse code")  
     
     def test_text_audio_download(self):
         """Test POST request for audio download from text"""
