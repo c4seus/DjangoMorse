@@ -99,12 +99,17 @@ DjangoMorse/
 │   ├── views.py          # Main logic and audio generation
 │   ├── urls.py           # URL routing
 │   ├── tests.py          # Unit tests
-│   └── templates/
-│       └── morse/
-│           └── home.html # Main interface with mode switching
+│   └── templates/morse/
+│       └── home.html      # Main UI
+├── static/                # Static files (CSS, JS, images)
+│   └── css/
+│       └── style.css
 ├── manage.py
 └── README.md
 ```
+
+> **Note:** Static files are now served from `static/`, not `templates/static/`.  
+> Use `{% load static %}` at the top of your template and `{% static 'css/style.css' %}` to reference your CSS files.
 
 ## API Reference
 
