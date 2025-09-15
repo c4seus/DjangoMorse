@@ -50,7 +50,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 3. Install dependencies:
 ```bash
-pip install django numpy
+pip install -r requirements.txt
 ```
 
 4. Run migrations:
