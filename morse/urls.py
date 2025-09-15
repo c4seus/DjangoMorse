@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import home_view
+from .views import MorseController
 
 urlpatterns = [
-    path("", home_view, name="home_view"),
+    path("", MorseController.as_view(), name="home"),
 ]

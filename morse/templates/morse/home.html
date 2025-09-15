@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morse Code App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .welcome-message {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .morse-form {
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .input-group input:focus {
+            border-color: #2196F3;
+            outline: none;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #2196F3;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1976D2;
+        }
+        .btn-secondary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #45a049;
+        }
+        .result {
+            background: #f0f8f0;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 20px;
+        }
+        .morse-output {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            background: white;
+            padding: 15px;
+            border-radius: 3px;
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #f44336;
+            margin-bottom: 20px;
+        }
+        .morse-info {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+        .morse-info ul {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔤 Morse Code Application</h1>
+        
+        <form method="post" class="morse-form">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="word">Enter text to convert:</label>
+                <input type="text" id="word" name="word" value="{{ word|default:'' }}" placeholder="Enter text here..." required>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" name="action" value="convert" class="btn btn-primary">Convert to Morse</button>
+                <button type="submit" name="action" value="download" class="btn btn-secondary">Download Audio</button>
+            </div>
+        </form>
+
+        {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+
+        {% if morse %}
+            <div class="result">
+                <h3>Morse Code Result:</h3>
+                <div class="morse-output">{{ morse }}</div>
+                <p><strong>Original:</strong> {{ word }}</p>
+            </div>
+        {% endif %}
+
+        <div class="morse-info">
+            <h3>About Morse Code</h3>
+            <p>Morse code is a method used in telecommunication to encode text characters as standardized sequences of two different signal durations, called dots and dashes.</p>
+            <ul>
+                <li><strong>Dot (.)</strong>: Short signal</li>
+                <li><strong>Dash (-)</strong>: Long signal (3x dot length)</li>
+                <li><strong>Space between letters</strong>: 3x dot length</li>
+                <li><strong>Space between words</strong>: 7x dot length</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
