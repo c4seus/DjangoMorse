@@ -120,8 +120,8 @@ def is_morse_code(text):
     return bool(cleaned) and all(c in '.-' for c in cleaned)
 
 class MorseController(View):
-    template_name = "morse/home.html"
-    
+    template_name = "home.html"
+
     def get(self, request):
         return render(request, self.template_name)
     
